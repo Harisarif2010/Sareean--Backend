@@ -1,0 +1,16 @@
+{
+    "rest-client.environmentVariables": {
+        "$shared": {
+            "baseUrl": "http://localhost:4000",
+            "liveUrl": "http://34.224.27.230:4000",
+            "userid": "6683bb0b6467454a5e4568cd",     
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ODNiYjBiNjQ2NzQ1NGE1ZTQ1NjhjZCIsImlhdCI6MTcxOTkyMDQ5M30.2WG0PlKp8HD36r0sGfaHLutzCv5bUA8l2hJLyHn6-8s"
+        }
+        // ,
+        // "local": {
+        // },
+        // "production": {
+        //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZjZjNmQ5N2Q1ZmQzZmQzYzlkZTE5ZiIsImlhdCI6MTcyNzQ0ODgyNX0.-ypSY_74Y0-KGLZlKRHNVD1MVnw18Kj-wXZztt4Ua2U"
+        // }
+    }
+}
