@@ -8,9 +8,9 @@ require("dotenv").config();
 const SCOPES = ['https://www.googleapis.com/auth/firebase.messaging'];
 const serviceAccount = require("../firebasePackerMover.json");
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount)
+// });
 
 const sendNotification = async(userid, title, body, type = null, modelid = null, sender = null)=>{
   if(sender){
