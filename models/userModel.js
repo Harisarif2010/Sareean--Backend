@@ -186,12 +186,13 @@ const userSchema = new mongoose.Schema({
     default: ""
   },
   shipments: {
-    type: [mongoose.Schema.Types.ObjectId],
-    default: []
+    type: [mongoose.Schema.Types.ObjectId]
   },
   pickups: {
-    type: [mongoose.Schema.Types.ObjectId],
-    default: []
+    type: [mongoose.Schema.Types.ObjectId]
+  },
+  driverTasks: {
+    type: [mongoose.Schema.Types.ObjectId]
   }
 });
 

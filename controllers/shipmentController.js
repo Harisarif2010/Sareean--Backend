@@ -18,9 +18,9 @@ const agenda = new Agenda({ db: { address: process.env.DATABASE_URL } });
 agenda.define('processPickupSchedule', async (job) => {
   const { pickup} = job.attrs.data;
 
-  var drivers = await User.find({userType: "driver", city: pickup.pickupLocation});
+  var drivers = await User.find({userType: "driver", accountStatus: "approved", city: pickup.pickupLocation});
   if(drivers.length == 0){
-    drivers = await User.find({userType: "driver"});
+    drivers = await User.find({userType: "driver", accountStatus: "approved"});
   }
   await Promise.all(
     drivers.map(async driver => {
@@ -470,6 +470,33 @@ const getUserShipments = async(req, res)=>{
   })
 
 }
+const getUserPickups = async(req, res)=>{
+  const {
+    userid
+  } = req.params;
+
+  var user = await User.findById(userid);
+  if(!user){
+    res.status(400).json({
+      success: false,
+      message: "user not found"
+    })
+    return;
+  }
+  
+  var pickups = await Promise.all(
+    user.pickups.map(async shipmentid => {
+      var shipment = await Pickup.findById(shipmentid);
+      return shipment;
+    })
+  )
+
+  res.status(200).json({
+    success: true,
+    pickups
+  })
+
+}
 const payForShipment = async(req, res) => {
   try{
     const{
@@ -608,9 +635,9 @@ const confirmDriverRequest = async(req, res) => {
           })
         )
 
-        var drivers = await User.find({userType: "driver", city: pickup.pickupLocation});
+        var drivers = await User.find({userType: "driver", accountStatus: "approved", city: pickup.pickupLocation});
         if(drivers.length == 0){
-          drivers = await User.find({userType: "driver"});
+          drivers = await User.find({userType: "driver", accountStatus: "approved"});
         }
         await Promise.all(
           drivers.map(async driver => {
@@ -669,8 +696,8 @@ const scheduleDriverRequest = async(req, res) => {
     }
 
     var batches = generatedRequest.response;
-    // const delay = hours * 60 * 60 * 1000; // Convert hours to milliseconds
-    const delay = hours * 1000; // Convert hours to milliseconds
+    const delay = hours * 60 * 60 * 1000; // Convert hours to milliseconds
+    // const delay = hours * 1000; // Convert hours to milliseconds
     var scheduleTime = new Date(Date.now() + delay)
     await Promise.all(
       batches.map(async pickup => {
@@ -892,5 +919,6 @@ module.exports = {
   getShipmentPrice,
   generateDriverRequest,
   confirmDriverRequest,
-  scheduleDriverRequest
+  scheduleDriverRequest,
+  getUserPickups
 };

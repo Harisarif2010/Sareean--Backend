@@ -20,7 +20,7 @@ const pickupSchema = new mongoose.Schema(
     status: {
       type: String,
       default: "unassigned",
-      enum: ["unassigned", "assigned", "reassigned", "scheduled"]
+      enum: ["unassigned", "intransit", "reassigned", "scheduled"]
     },
     scheduleTime: {
       type: Date

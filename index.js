@@ -718,6 +718,8 @@ const activityRoutes = require("./routes/activityRoutes");
 app.use("/activity", activityRoutes);
 const userRoutes = require("./routes/userRoutes");
 app.use("/user", userRoutes);
+const driverRoutes = require("./routes/driverRoutes");
+app.use("/driver", driverRoutes);
 const shipmentRoutes = require("./routes/shipmentRoutes");
 app.use("/shipment", shipmentRoutes);
 const authRoutes = require("./routes/authRoutes");

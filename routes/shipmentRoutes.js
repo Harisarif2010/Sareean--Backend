@@ -20,7 +20,8 @@ const {
     getShipmentPrice,
     generateDriverRequest,
     confirmDriverRequest,
-    scheduleDriverRequest
+    scheduleDriverRequest,
+    getUserPickups
 } = require("../controllers/shipmentController")
 
 const requireAuth = require("../middleware/requireAuth")
@@ -29,6 +30,7 @@ router.use(requireAuth)
 router.get("/getShipmentById/:orderid",getShipmentById)
 router.get("/getAllShipments",getAllShipments)
 router.get("/searchShipments", searchShipments)
+router.get("/getUserPickups/:userid", getUserPickups);
 router.delete("/deleteShipment", deleteShipment);
 router.post("/addShipment", addShipment)
 router.patch("/scheduleShipment", scheduleShipment)
