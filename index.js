@@ -705,15 +705,15 @@ app.use("/", (req, res) => {
  
 // #region MongoDb connection
 const PORT = process.env.PORT || 4001;
-const dbURI = process.env.DATABASE_URL;
+const dbURI = process.env.DATABASE_URL || "mongodb+srv://packermover:Qwerty123456@cluster0.vnvam.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 if (!dbURI) {
-    console.error('DATABASE_URL is not defined');
+    // console.error('DATABASE_URL is not defined');
 }else{
   console.log("got it ", dbURI)
 }
 mongoose
-.connect(process.env.DATABASE_URL)
+.connect(dbURI)
 .then(() => {
     server.listen(PORT, () => {
     console.log("Connected to DB and Server is Running");
