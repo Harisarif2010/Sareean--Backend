@@ -16,7 +16,7 @@
 #my files
 .env-example
 .env
-/firebasePackerMover.json
+/config custom
 
 # misc
 .DS_Store

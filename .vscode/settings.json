@@ -12,5 +12,9 @@
         // "production": {
         //     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZjZjNmQ5N2Q1ZmQzZmQzYzlkZTE5ZiIsImlhdCI6MTcyNzQ0ODgyNX0.-ypSY_74Y0-KGLZlKRHNVD1MVnw18Kj-wXZztt4Ua2U"
         // }
-    }
+    },
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ]
 }
