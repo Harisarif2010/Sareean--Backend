@@ -705,6 +705,11 @@ app.use("/", (req, res) => {
  
 // #region MongoDb connection
 const PORT = process.env.PORT || 4001;
+const dbURI = process.env.DATABASE_URL;
+
+if (!dbURI) {
+    console.error('DATABASE_URL is not defined');
+}
 mongoose
 .connect(process.env.DATABASE_URL)
 .then(() => {
