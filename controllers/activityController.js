@@ -2,7 +2,6 @@ const Activity = require("../models/activityModel");
 const User = require("../models/userModel");
 const Pickup = require("../models/pickupModel");
 const {sendNotification} = require("../controllers/notificationController")
-const {aws} = require("../helpers/otherHelpers")
 
 const createActivity = async (
   userid,

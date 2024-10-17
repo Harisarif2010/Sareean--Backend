@@ -1,11 +1,11 @@
 const User = require("../models/userModel");
 const Wallet = require("../models/walletModel");
 const UnderSignup = require("../models/underSignupModel");
-const {is, aws} = require("../helpers/otherHelpers")
+const {is} = require("../helpers/otherHelpers")
 
 const nodemailer = require("nodemailer");
 
-const twilio = require("twilio");
+// const twilio = require("twilio");
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -19,7 +19,7 @@ const validator = require('validator');
 require("dotenv").config();
 
 const randomName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex");
-const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+// const client = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
 
 const godaddyEmail = process.env.EMAIL;
 const godaddyPassword = process.env.PASSWORD;
@@ -88,7 +88,7 @@ const loginUser = async (req, res) => {
     const userObject = user.toObject();
     delete userObject.password;
 
-    url = user.profilePic && user.profilePic.trim() != "" ? await aws.getLinkFromAWS(user.profilePic) : "";
+    url = user.profilePic || "";
     res.status(200).json({ user: userObject, token, url });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -145,11 +145,16 @@ const signupUser = async (req, res) => {
       await sendMail(otp, email);
     }else if(primaryType == "phone"){
       var body = `Your Packers and Movers verification code is ${otp}`;
-      const message = await client.messages.create({
-        body: body,
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: email,
+      res.status(400).json({
+        success: false,
+        message: "please give otp sending mode",
       });
+      return;
+      // const message = await client.messages.create({
+      //   body: body,
+      //   from: process.env.TWILIO_PHONE_NUMBER,
+      //   to: email,
+      // });
       if (message.body.error_code != null) {
         res.status(400).json({
           success: false,

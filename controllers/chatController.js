@@ -2,28 +2,7 @@ const User = require("../models/userModel")
 const Chat = require("../models/chatModel")
 const Thread = require("../models/threadModel")
 
-const { S3Client, PutObjectCommand, GetObjectCommand, CopyObjectCommand, DeleteObjectCommand, HeadObjectCommand } = require("@aws-sdk/client-s3");
-const { getSignedUrl } = require('@aws-sdk/s3-request-presigner')
-
 require('dotenv').config()
-
-
-bucketName = process.env.BUCKET_NAME
-bucketRegion = process.env.BUCKET_REGION
-accessKey = process.env.ACCESS_KEY
-secretAccessKey = process.env.SECRET_ACCESS_KEY
-
-const randomName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex')
-
-
-const s3 = new S3Client({
-    credentials: {
-        accessKeyId: accessKey,
-        secretAccessKey: secretAccessKey
-    },
-    region: bucketRegion
-})
-
 
 const getChatHistory = async (req, res) => {
     try {

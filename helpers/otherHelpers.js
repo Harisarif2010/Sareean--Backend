@@ -1,68 +1,13 @@
 const User = require("../models/userModel");
-const { Upload } = require("@aws-sdk/lib-storage");
-const Client = require('ssh2-sftp-client');
-const sftp = new Client();
 const path = require("path")
-
-const {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-  CopyObjectCommand,
-  DeleteObjectCommand,
-  HeadObjectCommand,
-} = require("@aws-sdk/client-s3");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const fs = require('fs');
+const os = require('os');
+const util = require('util');
+const writeFile = util.promisify(fs.writeFile);
 const crypto = require("crypto");
-
 require("dotenv").config();
 
-bucketName = process.env.BUCKET_NAME;
-bucketRegion = process.env.BUCKET_REGION;
-accessKey = process.env.ACCESS_KEY;
-secretAccessKey = process.env.SECRET_ACCESS_KEY;
-
 const randomName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex");
-
-const s3 = new S3Client({
-  credentials: {
-    accessKeyId: accessKey,
-    secretAccessKey: secretAccessKey,
-  },
-  region: bucketRegion,
-});
-
-
-
-var aws = {
-  uploadToAWS : async function(content){
-    const contentFileName = randomName();
-
-    const contentParams = {
-      Bucket: bucketName,
-      Key: contentFileName,
-      Body: content.buffer,
-    ContentType: content.mimetype,
-    };
-
-    await uploadToS3(contentParams)
-
-    return contentFileName;
-  },
-
-  getLinkFromAWS : async function(key){
-    var url = "";
-    if(key && key.trim() != ""){
-      const getObjectParams = {
-        Bucket: bucketName,
-        Key: key,
-      };
-      const command = new GetObjectCommand(getObjectParams);
-      url = await getSignedUrl(s3, command, { expiresIn: "604800" });
-    }
-    return url;
-  }
-}
 
 var db = {
   findOne: async function(model, params){
@@ -94,43 +39,35 @@ var db = {
   },
 }
 
+const getServerIP = () => {
+  const interfaces = os.networkInterfaces();
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name]) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        return iface.address; // Return the external IPv4 address
+      }
+    }
+  }
+  throw new Error('No external IPv4 address found');
+};
+
 var is = {  // Image Server
   
   upload: async function (file){
 
     var fileName = `${randomName()}${path.extname(file.originalname)}`;
-    const remotePath = `${fileName}`;
-    const config = {
-      host: process.env.IMAGE_SERVER_HOST,
-      port: '22',
-      username: process.env.IMAGE_SERVER_USERNAME,
-      password: process.env.IMAGE_SERVER_PASSWORD
-    };
+    const storagePath = path.join(__dirname, 'public', 'storage', fileName);
   
     try {
-      await sftp.connect(config);
-  
-      const bufferStream = require('stream').Readable.from(file.buffer);
-      
-      await sftp.put(bufferStream, remotePath);
-  
-      await sftp.end();
-      return `https://211.45.162.49.nip.io/${fileName}`;
+      await writeFile(storagePath, file.buffer);
+      const serverIP = getServerIP();  
+    return `https://${serverIP}/storage/${fileName}`;
     } catch (err) {
       console.error(err.message);
       throw Error("Error: ", err.message)
     }
   }
 }
-
-
-const uploadToS3 = async (params) => {
-  const upload = new Upload({
-    client: s3,
-    params: params,
-  });
-  await upload.done();
-};
 
 function tryCatch(callback, res=null){
   try{
@@ -157,21 +94,6 @@ function error(res, error, notThrow = false){
   }
 }
 
-async function validateUser(userid, currRole=null){
-  const user = await User.findById(userid)
-  if(!user){
-      error(null, "User not found");
-  }
-
-  if(currRole){
-    if(user.currentAccountState != currRole){
-        error(null, `Please switch to your ${currRole} account`)
-    }
-  }
-
-  return user;
-}
-
 function truncateString(str, maxLength) {
   if (str.length > maxLength) {
       return str.substring(0, maxLength) + '...';
@@ -184,4 +106,4 @@ function paginateArray(array, perPage, pageNo) {
   return array.slice(startIndex, startIndex + perPage);
 }
 
-  module.exports = { aws, db, is, tryCatch, error, validateUser, truncateString, paginateArray }
+  module.exports = { db, is, tryCatch, error, truncateString, paginateArray }

@@ -6,16 +6,13 @@ const mongoose = require("mongoose");
 const path = require("path")
 const crypto = require("crypto");
 const http = require("http");
-const clientS3 = require("@aws-sdk/client-s3")
 const axios = require("axios")
 const fs = require("fs")
 const {is} = require("./helpers/otherHelpers")
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 // #endregion Imports:packages
 
 // #region Imports:local
-const {aws} = require("./helpers/otherHelpers");
 const { sendNotification} = require("./controllers/notificationController");
 const { createActivity } = require("./controllers/activityController");
 
@@ -683,34 +680,6 @@ io.on("connection", async (socket) => {
 });
 
 // #endregion Sockets
-
-// #region Aws Initializations
-const {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-  CopyObjectCommand,
-  DeleteObjectCommand,
-  HeadObjectCommand,
-} = clientS3;
-
-
-bucketName = process.env.BUCKET_NAME;
-bucketRegion = process.env.BUCKET_REGION;
-accessKey = process.env.ACCESS_KEY;
-secretAccessKey = process.env.SECRET_ACCESS_KEY;
-
-const randomName = (bytes = 32) => crypto.randomBytes(bytes).toString("hex");
-
-const s3 = new S3Client({
-  credentials: {
-    accessKeyId: accessKey,
-    secretAccessKey: secretAccessKey,
-  },
-  region: bucketRegion,
-});
-
-// #endregion Aws Initializations
 
 // #region Routes
 // const nameRoutes = require("./routes/nameRoutes");

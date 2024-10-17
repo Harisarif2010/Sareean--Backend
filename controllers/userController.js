@@ -48,7 +48,7 @@ const getUserById = async (req, res) => {
     }
 
     user = user.toObject();
-    user.profilePic = await aws.getLinkFromAWS(user.profilePic);
+    // user.profilePic = await aws.getLinkFromAWS(user.profilePic);
     res.status(200).json({
       user,
     });
@@ -81,7 +81,8 @@ const getPicUrl = async (id) => {
     if (!user) {
       return("user deleted")
     }
-    return await aws.getLinkFromAWS(user.profilePic);
+    // return await aws.getLinkFromAWS(user.profilePic);
+    return user.profilePic;
   } catch (error) {
     throw error.message;
   }
@@ -95,15 +96,15 @@ const setProfilePic = async (req, res) => {
         return("user deleted")
       }
   
-      let key = "";
+      let profilePic = "";
       if (req.file) {
-        key = await aws.uploadToAWS(req.file);
+        profilePic = await is.upload(req.file);
         await user.updateOne({
-            profilePic: key
+            profilePic: profilePic
         })
       }
       res.status(200).json({
-        key: await aws.getLinkFromAWS(key)
+        profilePic
       })
     } catch (error) {
       res.status(400).json({
@@ -275,14 +276,14 @@ const transUsers = async (data)=>{
       data.map(async (user) => {
         user = user.toObject();
         const url = await getPicUrl(user._id);
-        user.profilePic = await aws.getLinkFromAWS(url);
+        // user.profilePic = await aws.getLinkFromAWS(url);
         return user;
       })
     )
   }else{
     data = data.toObject();
     const url = await getPicUrl(data._id);
-    data.profilePic = await aws.getLinkFromAWS(url);
+    // data.profilePic = await aws.getLinkFromAWS(url);
   }
   return data
 }
@@ -748,12 +749,12 @@ const editProfile = async (req, res) => {
     }
 
     if(req.files['licenseFront']){
-        var contentName = await aws.uploadToAWS(req.files['licenseFront'][0]);
+        var contentName = await is.upload(req.files['licenseFront'][0]);
         newData({"license.front": contentName})
     }
 
     if(req.files['licenseBack']){
-      var contentName = await aws.uploadToAWS(req.files['licenseBack'][0]);
+      var contentName = await is.upload(req.files['licenseBack'][0]);
       newData({"license.back": contentName})
     }
 
