@@ -704,10 +704,11 @@ app.use("/", (req, res) => {
 // #endregion Routes
  
 // #region MongoDb connection
+const PORT = process.env.PORT || 4001;
 mongoose
 .connect(process.env.DATABASE_URL)
 .then(() => {
-    server.listen(process.env.PORT, () => {
+    server.listen(PORT, () => {
     console.log("Connected to DB and Server is Running");
     });
 })

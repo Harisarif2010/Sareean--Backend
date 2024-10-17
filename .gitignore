@@ -15,7 +15,7 @@
 
 #my files
 .env-example
-.env
+# .env
 /config custom
 
 # misc

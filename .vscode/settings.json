@@ -16,5 +16,7 @@
     "appService.zipIgnorePattern": [
         "node_modules{,/**}",
         ".vscode{,/**}"
-    ]
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/03608509-25c4-4378-a9d5-d6dfc1885f32/resourceGroups/packersandmovers_group/providers/Microsoft.Web/sites/packersandmovers",
+    "appService.deploySubpath": "."
 }
