@@ -682,7 +682,6 @@ io.on("connection", async (socket) => {
 // #endregion Sockets
 
 // #region Routes
-// const nameRoutes = require("./routes/nameRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 app.use("/activity", activityRoutes);
 const userRoutes = require("./routes/userRoutes");
