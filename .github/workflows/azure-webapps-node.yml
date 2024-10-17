@@ -26,7 +26,7 @@ env:
   AZURE_WEBAPP_NAME: packersandmovers    # set this to your application's name
   AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
   NODE_VERSION: '20.x'                # set this to the node version to use
-  DATABASE_URL='mongodb+srv://packermover:Qwerty123456!@packermover.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000'
+  DATABASE_URL: 'mongodb+srv://packermover:Qwerty123456!@packermover.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000'
 
 permissions:
   contents: read
@@ -46,7 +46,7 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm install
-        npm run start
+        npm run start --if-present
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
       with:
