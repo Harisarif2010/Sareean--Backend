@@ -709,6 +709,8 @@ const dbURI = process.env.DATABASE_URL;
 
 if (!dbURI) {
     console.error('DATABASE_URL is not defined');
+}else{
+  console.log("got it ", dbURI)
 }
 mongoose
 .connect(process.env.DATABASE_URL)
