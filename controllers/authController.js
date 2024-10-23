@@ -204,6 +204,7 @@ const verifyOTP = async (req, res) => {
       await otpDoc.deleteOne();
       res.status(200).json({
         message: "Sign Up Successfull",
+        _id: user._id
       });
     } else {
       throw Error("Otp Verification Failed");

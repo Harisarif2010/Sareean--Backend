@@ -20,6 +20,10 @@ const licenseSchema = new mongoose.Schema({
   approved: {
     type: Boolean,
     default: null
+  },
+  nationality: {
+    type: String,
+    default: ""
   }
 })
 

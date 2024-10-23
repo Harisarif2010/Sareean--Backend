@@ -663,6 +663,7 @@ const editProfile = async (req, res) => {
       city,
       licenseNumber,
       licenseIssueDate,
+      licenseNationality,
       vehicleNumber,
       vehicleCountry,
       vehicleName,
@@ -767,6 +768,10 @@ const editProfile = async (req, res) => {
         date = new Date(date);
       }
       newData({"license.issueDate": date})
+    }
+
+    if(licenseNationality){
+      newData({"license.nationality": licenseNationality})
     }
 
     if(vehicleNumber){
